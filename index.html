@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>CSUK Consumer Bureau – Glossary of Terms</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,wght@0,300;0,400;0,500;0,600;0,700;1,400&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:#111f2e;--navy-mid:#1a2e44;--navy-light:#243d57;
+    --red:#e82222;--white:#ffffff;
+    --grey-100:#f4f6f8;--grey-200:#e8ecf0;
+    --grey-400:#94a3b8;--grey-600:#64748b;--text:#1a2e44;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{font-family:'DM Sans',sans-serif;background:var(--grey-100);color:var(--text);}
+  .header{background:linear-gradient(115deg,var(--navy) 0%,var(--navy-mid) 60%,var(--navy-light) 100%);padding:28px 48px;position:relative;overflow:hidden;}
+  .header::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;background:var(--red);}
+  .hgrid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,0.02) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,0.02) 1px,transparent 1px);background-size:32px 32px;}
+  .hc{position:relative;z-index:1;}
+  .eyebrow{font-size:10px;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:var(--red);margin-bottom:6px;}
+  .header h1{font-size:26px;font-weight:700;color:var(--white);letter-spacing:-0.3px;}
+  .header h1 span{color:var(--red);}
+  .header-sub{font-size:12px;color:rgba(255,255,255,0.45);font-weight:300;margin-top:4px;}
+  .term-count{position:absolute;top:28px;right:48px;background:rgba(232,34,34,0.15);border:1px solid rgba(232,34,34,0.3);border-radius:6px;padding:5px 12px;font-size:11px;font-weight:600;color:rgba(232,100,100,0.9);z-index:1;}
+  .toolbar{background:var(--white);border-bottom:1px solid var(--grey-200);padding:12px 48px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100;box-shadow:0 2px 8px rgba(0,0,0,0.06);}
+  .search-wrap{position:relative;flex:1;max-width:400px;}
+  .search-wrap input{width:100%;padding:8px 12px 8px 32px;border:1.5px solid var(--grey-200);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);background:var(--grey-100);outline:none;transition:border-color 0.2s;}
+  .search-wrap input:focus{border-color:var(--red);background:var(--white);}
+  .search-wrap input::placeholder{color:var(--grey-400);}
+  .search-icon{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--grey-400);font-size:12px;}
+  .btn{padding:8px 16px;border-radius:8px;border:none;font-family:'DM Sans',sans-serif;font-size:12px;font-weight:600;cursor:pointer;transition:all 0.15s;}
+  .btn-primary{background:var(--red);color:var(--white);}
+  .btn-primary:hover{background:#c91c1c;}
+  .btn-outline{background:transparent;color:var(--navy);border:1.5px solid var(--grey-200);}
+  .btn-outline:hover{background:var(--grey-100);}
+  .result-info{font-size:12px;color:var(--grey-400);margin-left:auto;}
+  .az-nav{background:var(--white);border-bottom:1px solid var(--grey-200);padding:8px 48px;display:flex;flex-wrap:wrap;gap:3px;position:sticky;top:53px;z-index:99;}
+  .az-btn{width:26px;height:26px;border-radius:5px;border:none;background:transparent;font-family:'DM Mono',monospace;font-size:11px;font-weight:500;color:var(--grey-400);cursor:pointer;transition:all 0.15s;display:flex;align-items:center;justify-content:center;}
+  .az-btn.has{color:var(--navy);font-weight:600;}
+  .az-btn.has:hover{background:var(--grey-100);}
+  .az-btn.active{background:var(--navy);color:var(--white);}
+  .az-btn.none{color:var(--grey-200);pointer-events:none;}
+  .az-all{margin-left:8px;padding:0 10px;height:26px;border-radius:5px;border:1px solid var(--grey-200);background:transparent;font-family:'DM Sans',sans-serif;font-size:11px;color:var(--grey-600);cursor:pointer;}
+  .az-all:hover{background:var(--grey-100);}
+  .main{padding:24px 48px 48px;max-width:960px;}
+  .letter-section{margin-bottom:32px;}
+  .letter-heading{display:flex;align-items:center;gap:12px;margin-bottom:12px;}
+  .letter-badge{width:36px;height:36px;background:var(--navy);border-radius:7px;display:flex;align-items:center;justify-content:center;font-family:'DM Mono',monospace;font-size:16px;font-weight:500;color:var(--white);flex-shrink:0;}
+  .letter-line{flex:1;height:1px;background:var(--grey-200);}
+  .term-card{background:var(--white);border-radius:10px;border:1.5px solid var(--grey-200);margin-bottom:8px;overflow:hidden;transition:border-color 0.2s,box-shadow 0.2s;}
+  .term-card:hover{border-color:#c5cdd8;box-shadow:0 2px 10px rgba(0,0,0,0.05);}
+  .term-header{display:flex;align-items:center;padding:13px 16px;cursor:pointer;gap:10px;}
+  .term-name{font-size:14px;font-weight:600;color:var(--navy);flex:1;}
+  .term-name mark{background:rgba(232,34,34,0.12);color:var(--red);border-radius:2px;padding:0 1px;}
+  .term-actions{display:flex;gap:6px;opacity:0;transition:opacity 0.15s;}
+  .term-card:hover .term-actions{opacity:1;}
+  .act-btn{width:24px;height:24px;border-radius:5px;border:none;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:11px;transition:all 0.15s;}
+  .act-edit{background:rgba(26,46,68,0.08);color:var(--navy);}
+  .act-edit:hover{background:var(--navy);color:var(--white);}
+  .act-del{background:rgba(232,34,34,0.08);color:var(--red);}
+  .act-del:hover{background:var(--red);color:var(--white);}
+  .term-toggle{width:20px;height:20px;border-radius:50%;background:var(--grey-100);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--grey-600);transition:all 0.2s;flex-shrink:0;}
+  .term-card.open .term-toggle{background:var(--red);color:var(--white);transform:rotate(180deg);}
+  .term-body{display:none;padding:0 16px 16px;border-top:1px solid var(--grey-100);}
+  .term-card.open .term-body{display:block;}
+  .term-body p{font-size:13px;line-height:1.75;color:#334155;margin-top:12px;}
+  .term-body ul{margin:8px 0 8px 18px;font-size:13px;line-height:1.75;color:#334155;}
+  .term-body li{margin-bottom:3px;}
+  .back-top{display:inline-flex;align-items:center;gap:5px;margin-top:12px;font-size:11px;font-weight:600;color:var(--grey-400);cursor:pointer;letter-spacing:0.3px;background:none;border:none;font-family:'DM Sans',sans-serif;}
+  .back-top:hover{color:var(--red);}
+  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.5);z-index:999;align-items:center;justify-content:center;}
+  .modal-overlay.open{display:flex;}
+  .modal{background:var(--white);border-radius:14px;padding:28px;width:560px;max-width:95vw;max-height:90vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,0.2);}
+  .modal-title{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:20px;display:flex;align-items:center;gap:8px;}
+  .modal-title span.bar{width:4px;height:20px;background:var(--red);border-radius:2px;display:inline-block;}
+  .form-group{margin-bottom:16px;}
+  .form-label{display:block;font-size:11px;font-weight:700;letter-spacing:1px;text-transform:uppercase;color:var(--grey-600);margin-bottom:6px;}
+  .form-input,.form-textarea{width:100%;padding:10px 12px;border:1.5px solid var(--grey-200);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--text);outline:none;transition:border-color 0.2s;}
+  .form-input:focus,.form-textarea:focus{border-color:var(--red);}
+  .form-textarea{min-height:160px;resize:vertical;line-height:1.6;}
+  .ai-hint{font-size:11px;color:var(--grey-400);margin-top:5px;}
+  .modal-actions{display:flex;gap:10px;justify-content:flex-end;margin-top:20px;}
+  .ai-btn{display:flex;align-items:center;gap:6px;padding:6px 12px;border-radius:6px;border:1.5px solid rgba(232,34,34,0.3);background:rgba(232,34,34,0.06);color:var(--red);font-family:'DM Sans',sans-serif;font-size:11px;font-weight:600;cursor:pointer;transition:all 0.15s;margin-top:6px;}
+  .ai-btn:hover{background:rgba(232,34,34,0.12);}
+  .ai-btn:disabled{opacity:0.5;cursor:not-allowed;}
+  .ai-loading{display:inline-block;width:10px;height:10px;border:2px solid rgba(232,34,34,0.3);border-top-color:var(--red);border-radius:50%;animation:spin 0.6s linear infinite;}
+  @keyframes spin{to{transform:rotate(360deg);}}
+  .no-results{display:none;text-align:center;padding:48px;color:var(--grey-400);}
+  .no-results.show{display:block;}
+  .no-results h3{font-size:15px;font-weight:600;color:var(--grey-600);margin-bottom:6px;}
+  .toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:var(--white);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s;}
+  .toast.show{transform:translateY(0);opacity:1;}
+  .footer{padding:20px 48px;font-size:11px;color:var(--grey-400);border-top:1px solid var(--grey-200);}
+</style>
+</head>
+<body>
+
+<div class="header">
+  <div class="hgrid"></div>
+  <div class="hc">
+    <div class="eyebrow">CSUK Consumer Bureau Knowledge Base</div>
+    <h1>Glossary of <span>Terms</span></h1>
+    <div class="header-sub">Bureau, credit industry and technical terminology — click any term to expand</div>
+  </div>
+  <div class="term-count" id="termCount">0 terms</div>
+</div>
+
+<div class="toolbar">
+  <div class="search-wrap">
+    <span class="search-icon">🔍</span>
+    <input type="text" id="searchInput" placeholder="Search terms and definitions…" oninput="render()">
+  </div>
+  <button class="btn btn-primary" onclick="openModal()">+ Add Term</button>
+  <div class="result-info" id="resultInfo"></div>
+</div>
+
+<div class="az-nav" id="azNav"></div>
+<div class="main" id="main"></div>
+<div class="no-results" id="noResults"><h3>No matching terms found</h3><p>Try a different search or clear the filter.</p></div>
+
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-title"><span class="bar"></span><span id="modalTitle">Add New Term</span></div>
+    <div class="form-group">
+      <label class="form-label">Term</label>
+      <input type="text" class="form-input" id="termInput" placeholder="e.g. Credit score">
+    </div>
+    <div class="form-group">
+      <label class="form-label">Definition</label>
+      <textarea class="form-textarea" id="defInput" placeholder="Enter a definition, or leave blank and use AI to generate one…"></textarea>
+      <div class="ai-hint">💡 Enter a rough definition and click AI Enhance to improve it, or leave blank and AI will write one from the term name.</div>
+      <button class="ai-btn" id="aiEnhanceBtn" onclick="aiEnhance()">
+        <span id="aiIcon">✨</span> AI Enhance Definition
+      </button>
+    </div>
+    <div class="modal-actions">
+      <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
+      <button class="btn btn-primary" onclick="saveTerm()">Save Term</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="footer">CSUK Consumer Bureau Knowledge Base &nbsp;·&nbsp; Creditsafe UK &nbsp;·&nbsp; Internal use only</div>
+
+<script>
+let terms = [
+  {id:1,term:"Account number",definition:"An alphanumeric identifier used to uniquely identify an account issued by a supplier. Up to 18 bytes are used to identify the account itself. In the case of a joint account, a 20th byte containing an 'S' indicates the primary account holder, while subsequent holders are denoted '1P', '2P' etc., using bytes 19-20. (See also: PAN (account number))."},
+  {id:2,term:"Account performance",definition:"An account typically represents a credit agreement operating on a fixed term (e.g. a loan), on a revolving basis (e.g. a credit card) or an ongoing basis (e.g. utilities). Where a monthly payment is expected by the agreement, the satisfactory payment or otherwise, by the due date, represents the account performance. Non payment or partial payment leads to arrears. Suppliers typically provide a monthly snapshot of the performance of all their accounts to each CRA."},
+  {id:3,term:"Address key",definition:"A unique identifier specific to a physical address in an address universe. For the UK, an address key is likely to be one of 'UDPRN' (Royal Mail PAF delivery point), a 'UMRRN' (Royal Mail Multi-residence location) or a 'UPRN' (Ordnance Survey Address Base location)."},
+  {id:4,term:"Address matching (and standardisation)",definition:"Address matching: the input address text is first parsed and then compared to an address universe. The address in the universe that best matches the input is returned as the matched address. Address standardisation: the results of parsing and matching may identify elements of the address that can be verified within the address universe, e.g. the postcode, town, street name and house name. See also: Melissa."},
+  {id:5,term:"Address parsing",definition:"Processing the input address text (in whatever structure) to correct obvious errors, extract a postcode, and split any address lines that appear to be delimited."},
+  {id:6,term:"Address universe",definition:"The set of locations (typically consumer and commercial properties and dwellings) that are uniquely identified (with an address key) by a company that collates address information. In the UK, the principle address universes are 'PAF' from the Royal Mail, and 'Address Base' from the Ordnance Survey."},
+  {id:7,term:"Analytical environment",definition:"A core component of the bureau architecture providing: a copy of production data operating longer R&D-based data retention policies; daily sync of production changes; services for batch products not needing the production environment (primary use case is the retro); and a data store for all analytical work. No process relating to real-time consumer decision making is permitted to use data in the analytical environment."},
+  {id:8,term:"Arrears",definition:"Accounts that fail to keep up with scheduled payments are deemed to be 'in arrears'. Arrears are typically reported as the number of months of missed payments. At 3 or more months in arrears, a lender is likely to initiate the process to classify the account as 'in default'."},
+  {id:9,term:"Association",definition:"A link between any pair of entity keys. The primary type is the 'financial association', which exists between any pair of consumers that share a joint account, or have performed a joint search. Financial associations can typically only be annulled by request to the Ops team."},
+  {id:10,term:"Batch, stream, transaction (processing)",definition:"Batch: a process where the input consists of a file/structure that can be processed in parallel. Stream: a continuous input of distinct records/documents. Transaction: a process where the input consists of a single record/document, which may have business logic rules applied such as strictly chronological ordering."},
+  {id:11,term:"Best identity",definition:"A core component of the person-centric bureau architecture. A document summarising the identity elements received on all data items owned by an entity. It serves to: reduce the impact of data errors on entity matching; reduce comparisons required during matching; and provide a resource for products and services relating to identity. Note: the best identity is not a source of truth — the data items attributed to the entity remain the single source of truth."},
+  {id:12,term:"Cache / locker",definition:"A proposed component of the person-centric bureau architecture. In a high-throughput parallel-processing environment, there is a risk of concurrent processes trying to identify the same individual simultaneously. The proposed solution uses elements of the input PII as a 'lock', requiring any process attempting to identify the same PII to wait for the lock to be released and process sequentially."},
+  {id:13,term:"Candidate set",definition:"A core concept representing the group of entities that might match to the input details. The candidate set is the output of the 'stage' step of the entity matching process, reducing the entire entity universe down to those that could potentially match the input PII."},
+  {id:14,term:"Candidate set key",definition:"A 'recipe' taking ingredients comprising an entity's identity details (such as DoB + surname + postcode). This value is calculated for every entity from the best identity document and stored as a hash table. The design of keys should reflect requirements for discriminatory power, attribute balance, and minimised processing overheads."},
+  {id:15,term:"Candidate set key look-up",definition:"A core component of the entity matching process — generating the values for each candidate set key from the supplied input details, and comparing them to the values computed and stored for the entity universe as a whole. Where values match, that entity key is added to the candidate set."},
+  {id:16,term:"Candidate set key pruning & prioritisation",definition:"An optimisation in candidate set creation. If the look-up returns many candidates (e.g. for common names or missing data), prioritisation sorts candidates by likelihood to match, and pruning removes those least likely to match. The primary benefit is reducing time spent matching against a large number of candidates."},
+  {id:17,term:"CATO",definition:"Current Account Turnover data. A monthly snapshot from each of the UK's largest retail banks comprising the current bank accounts of all consented consumers with their latest monthly turnover (sum of credit transactions). Most banks include the last 12 months of turnover. The principle use case is validating a declared income. Only consented accounts are shared, representing approximately 75% of all accounts."},
+  {id:18,term:"Characteristics (aka 'chars')",definition:"A credit industry term for any statistic summarising raw data according to a defined algorithm — more commonly called a 'feature' in analytical terms. Examples include counts of records, number of accounts, number of searches. Conditions on input data such as account types, time periods and status quickly lead to a very large number of available chars from a CRA."},
+  {id:19,term:"Client",definition:"A commercial customer of the bureau, purchasing products and services. If not also a supplier, they will be limited in terms of information they are permitted to see relating to accounts."},
+  {id:20,term:"Collaborative keying",definition:"An advanced PCK concept for occasions where entity matching is taking place concurrently for multiple real individuals assumed to be linked (see Joint account and Joint search). Knowledge of both sets of PII can assist matching — for example, 'DAVID SMITH' is very common, but 'DAVID SMITH' and 'JENNIFER SMITH' together are far fewer in combination."},
+  {id:21,term:"Compensatory records",definition:"See Corrections. A compensatory record is a mechanism for accommodating a correction to a previously supplied data item. A correction is loaded as a new record that will supersede the original when the data is processed. It may come from a supplier via the Supplier Portal, or from CS Ops via the Ops Portal."},
+  {id:22,term:"Consumer",definition:"An individual person. The data items held in the bureau should all relate to consumers. In an ideal world, each consumer is referenced by a single entity key, and this key is the owner of all data items that belong to that individual."},
+  {id:23,term:"Consumer Portal",definition:"A core component of the bureau design. CreditSafe wish to support data transparency and data ownership by making it as easy as possible — and free of charge — for a consumer to see the data held about them. The portal (website and app planned) would require the consumer to validate their identity and create an account. It also provides a channel for the bureau to contact individuals and provide guidance."},
+  {id:24,term:"Corrections",definition:"Corrections apply where records loaded to the warehouse have been identified as containing factual errors. A correction could be an overwrite of the incorrect data, or applied as a compensatory record — a new record loaded that supersedes the original. The compensatory record may come from a supplier (via file or Supplier Portal) or from CS Ops (via the Ops Portal)."},
+  {id:25,term:"Credit Reference Agency (CRA) / Credit bureau",definition:"Relates to the consolidation, storage and maintenance of consumer data for the purpose of providing checks prior to the granting of credit. Additional purposes include identity verification, affordability assessment and marketing services. Being a registered CRA allows the company to receive, process and store sensitive information such as the full Electoral Roll, director registered addresses and account data."},
+  {id:26,term:"Credit report",definition:"An umbrella term referring to the supply of information held on an individual consumer. In general, the report consists of: identity details (name(s), DoB, addresses); raw data such as accounts, Electoral Roll, searches and public data (CCJs); summary characteristics; and credit score. See also: Credit report (Statutory)."},
+  {id:27,term:"Credit report (Statutory)",definition:"Legally, a CRA must provide any consumer with a free credit report upon request. A statutory credit report will not contain a credit score. Note that a statutory credit report is different from the free credit reports offered by many companies online, who partner with a CRA to show consumers their data as an incentive to market credit products."},
+  {id:28,term:"Credit score",definition:"An umbrella term referring to the output of any statistical model that predicts the likelihood of credit risk for a consumer, typically over the next 12 months, based on historical data attributed to them. In the UK, the higher the credit score, the lower the risk. Credit risk models built by a CRA are typically called 'generic scores', built on samples taken from many different lenders and credit products."},
+  {id:29,term:"Data Assurance Process",definition:"A core component of the bureau design — a pipeline that validates a data provision before it is ingested and loaded to the bureau. Steps include: file-level validation; batch address matching (where appropriate); row-level data quality checks; summary of record-level checks for the entire file; and an optional data quality report."},
+  {id:30,term:"Data item",definition:"A single, discrete record from any data source, such as a search, account update, CCJ or electoral roll entry. Every data item must have an owner — the entity key of the entity to which the data item has been attributed — for it to be loaded to the data warehouse."},
+  {id:31,term:"Data load",definition:"A general term referring to the pipeline of processing from file receipt, through validation, entity matching and loading to the data warehouse."},
+  {id:32,term:"Data provider",definition:"See Supplier. A company or organisation that contributes data to the bureau."},
+  {id:33,term:"Data provision / Data contribution",definition:"A file sent by a supplier that will be loaded to the data warehouse."},
+  {id:34,term:"Data retention",definition:"An umbrella term referring to the limited time period that personal data can be kept under data protection legislation (GDPR storage limitation principle). The credit industry applies consistent policies: financial account data — last 6 years (and 6 years after account closure); searches — 1 year; CCJs and bankruptcies — 6 years from the judgment date."},
+  {id:35,term:"Data Subject Access Request (SAR / DSAR)",definition:"An individual has the right under GDPR legislation to view the personal data held by a 3rd party organisation. This is separate from a credit report."},
+  {id:36,term:"Dissociation",definition:"A necessary component for managing entity keys and preventing over-combination. A dissociation connects a pair of entity keys with an instruction to never permit a key collapse operation between them. It can only be added manually by a member of the Ops team, usually as part of a key splitting process to ensure a corrected over-combination cannot be recombined."},
+  {id:37,term:"Entity",definition:"The generic label for an individual consumer within the bureau. In a perfect person-centric bureau, each entity represents a single, unique individual. Fragmentation and over-combination act against this ideal. Each entity is assigned a unique entity key."},
+  {id:38,term:"Entity key",definition:"A unique reference number for an entity. The entity key may have a commercial name, such as Experian's 'ExPIN' or LexisNexis' 'LexID'. Every data item in the data warehouse must have an entity key owner."},
+  {id:39,term:"Entity key change history",definition:"Records when and why entity key changes (such as key collapses) were actioned. Acts as an audit trail and is envisaged to play a role in providing an undo mechanism to roll back an unintended key collapse. Where multiple entities are merged, the other entity keys are mapped to the surviving key and this history is recorded."},
+  {id:40,term:"Entity key repository and management",definition:"A core PCK component responsible for issuing new entity keys, tracking their current status and current mapping. An entity key is quasi-persistent — it may be mapped to another key, but the original is never deleted from the repo. If an entity key ceases to have any data items assigned to it, it becomes 'dormant'."},
+  {id:41,term:"Entity matching",definition:"The process of assigning an entity key to an input set of PII that describes an individual. The core parts are 'search' and 'match'. The process includes pre-entity matching (name/address parsing), search (candidate set creation and look-up), match (comparing candidates against input PII), and post-entity matching (updating best identity and candidate set keys). See also: Entity matching (mode)."},
+  {id:42,term:"Entity matching (mode)",definition:"There are two modes for entity matching: Search mode — only for finding a pre-existing entity, can return a 'no hit'; and Load mode — for data ingestion, must always return an entity key (required to write a record to the warehouse)."},
+  {id:43,term:"Entity resolution",definition:"An umbrella term referring to the capability of the PCK components — taken as a whole system — to correctly distinguish and maintain an entity universe with accurate entities."},
+  {id:44,term:"Entity universe",definition:"The set of all entities (and entity keys) that exist at any moment within the bureau — the set of consumers for which the bureau has data, and the best identity documents that identify them. Entity fragmentation means the universe will contain more entities than the number of real individuals for whom data is held."},
+  {id:45,term:"Fragmentation (of an entity)",definition:"A situation where the data items belonging to a single consumer are mistakenly assigned to multiple entities. This typically happens when a consumer changes address and a search at the new address is unable to match to the pre-existing entity, leading to a new entity key being created. Fragmentation is corrected through key collapse."},
+  {id:46,term:"Ghosting",definition:"A flag at one of several levels — on a supplier, a portfolio, an individual account, or an individual record — indicating that the ghosted data should not be returned to clients or consumers. Used when onboarding a new supplier/portfolio, where problems have been identified by the supplier, or where a consumer has queried the information."},
+  {id:47,term:"Input message",definition:"See Search request. The information passed to the API on a search request, at minimum containing the PII of the individual(s) to allow entity matching."},
+  {id:48,term:"Interactive search",definition:"A client operator connecting to a web-based application for carrying out searches, or enabling a human-in-the-loop during entity matching. Each step in the pipeline could be run in isolation with results returned to an operator for review. For the bureau ops team, the primary use case is finding the entity key for a consumer that has contacted CreditSafe with a query."},
+  {id:49,term:"Joint account",definition:"An account with multiple holders (where each holder is a unique individual). Unless entity matching cannot resolve the holder identities as separate entities, each holder obtains a separate entity key. Joint accounts are reported by suppliers multiple times — once per holder, each with a unique account number. Loading new joint accounts triggers financial association records to be created between each pair of entity keys."},
+  {id:50,term:"Joint search",definition:"A search request where the input message contains the PII details of more than one individual. Each individual will go through entity matching separately (see also Collaborative keying). Loading a joint search triggers financial association records to be created between each pair of entity keys, unless the search is flagged as 'transient'."},
+  {id:51,term:"Key collapse / Key merge",definition:"A core PCK component — the mechanism through which two or more entities are combined into one. May be triggered automatically during entity matching, by an Ops team manual process, or as a batch maintenance operation. Key collapse operations are subject to extensive validation before being actioned. Entities with an active dissociation between them can never be merged."},
+  {id:52,term:"Key splitting",definition:"A core PCK process required to deal with over-combination of an entity, where an entity key has been assigned as the owner of data items that should not belong to that entity. The process involves identifying affected data items, finding the correct owners, re-assigning them, and recalculating best identities and candidate set keys for all impacted entities. Over-combination errors are considered far worse than fragmentation."},
+  {id:53,term:"Keying & Linking",definition:"See Entity matching. The process of assigning an entity key to an input set of PII and creating association records between related individuals."},
+  {id:54,term:"Manual amendments",definition:"See Ops Portal and Supplier Portal. Manual amendments refer to changes made by operators using internal GUI tools to resolve consumer queries or correct data errors."},
+  {id:55,term:"Melissa",definition:"A 3rd party address matching solution being introduced by CreditSafe. Subject to testing, it is likely to be used as part of the initial bureau design."},
+  {id:56,term:"Model",definition:"A generic term denoting a statistical prediction of a certain outcome based on input characteristics. In credit risk terms, the outcome is usually a variant of 'credit risk' (failure to repay a credit obligation) over a short-to-medium time horizon (typically 12 months). See also: Credit score."},
+  {id:57,term:"Name parsing and standardisation",definition:"Parsing: processing input name text to extract identifiable elements — title, forename, middle name(s), surname (including multi-word surnames), generational suffix. Standardisation: conversion of characters to an ASCII set, cleaning of punctuation, correction of established errors. During entity matching, it may also refer to replacing a forename with a standardised version (e.g. 'MICK' to 'MICHAEL')."},
+  {id:58,term:"Off-line environment",definition:"See Analytical Environment. A copy of production data operating different (longer) data retention policies, used for R&D, analytical work and batch services such as the retro."},
+  {id:59,term:"Ops (Bureau operations team)",definition:"The team responsible for day-to-day BAU elements of the bureau. Responsible for all consumer-facing requests, managing suppliers and clients, and data loading. Skilled responsibilities include using the Ops Portal to make manual amendments to resolve consumer queries, including initiating key collapse and key splitting operations."},
+  {id:60,term:"Ops Portal",definition:"An intended part of the bureau design — one or more GUIs enabling an operator to perform tasks that do not need to be handed off to a specialised team in tech or data."},
+  {id:61,term:"Over-combination (of an entity)",definition:"One of the two errors that occur in a PCK solution (the other is fragmentation). A data item has been assigned an incorrect owner. In the simplest case, the error is resolved by re-assigning the data item to the correct owner. In general, fixing errors of this sort requires key splitting. Over-combination is considered far worse than fragmentation and should be avoided via conservative entity matching."},
+  {id:62,term:"Ownership (of a data item)",definition:"The entity key of the entity to which a data item has been attributed by entity matching."},
+  {id:63,term:"PAN (account number)",definition:"Primary Account Number, or payment card number. When the number on a payment card is used as the account identifier by a supplier, there are regulatory concerns around receipt and storage, primarily the need to achieve PCI DSS compliance. In practice, data controllers choose to store tokenized PANs. See also: PAN tokenization."},
+  {id:64,term:"PAN tokenization",definition:"A process by which the middle digits of a PAN are converted (using a consistent, reversible algorithm) to a meaningless string of digits."},
+  {id:65,term:"PCK / Person-centric",definition:"Interchangeable terms describing the data architecture of the bureau. In a person-centric bureau, each data item has an owner (a real individual, at least in principle). Historically, bureaus have been 'address-centric', grouping data items by a common address. A person-centric architecture has a number of desirable properties, at the cost of increased complexity."},
+  {id:66,term:"Person key",definition:"See Entity key. A unique reference number for an entity/individual within the bureau."},
+  {id:67,term:"PII",definition:"Personal Identifiable Information. For the purposes of entity resolution, this consists of name elements (title, forename, middle name, surname, generational suffix), DoB and address elements (address text, postcode, address key). Although not strictly PII, an account number often plays the same role as it almost always corresponds uniquely to a single entity."},
+  {id:68,term:"PII Fingerprint",definition:"A single combination of name + DoB + address. If an individual has multiple possible names or addresses, every unique combination represents a separate fingerprint. For example, a search for an individual with a current name, a previous name, a current address and two previous addresses would generate (1+1) x (1+2) = 6 unique fingerprints."},
+  {id:69,term:"Production environment",definition:"The live, customer and client-facing environment within which any visible data may influence decision-making that can impact an individual. Data and processes must meet all regulatory standards. Likely to comprise a data lake, an entity key repository, a data warehouse, and processing pipelines."},
+  {id:70,term:"Raw data",definition:"Within a CRA, raw data has a specific meaning — the return of unsummarised consumer data (i.e. not characteristics) on a search request, referring to the data warehouse records for the consumer. A client may request raw data as well as, or instead of, chars and scores, as it gives them flexibility in how to use the information."},
+  {id:71,term:"Retro",definition:"A standard credit industry term for a service that generates a retrospective credit report — what would the bureau have returned had a search been made at a date in the past (the retro date)? An application retro covers data visible at the retro date; an outcome retro also includes data subsequently loaded. Common uses include CRA evaluation, model building and customer management retros."},
+  {id:72,term:"Search (and search footprint)",definition:"A generic term for any request made to a CRA for information about an individual consumer. Types include: credit search (hard search, footprint visible to future searches); quotation search (soft search, footprint not visible to others); debt collection search; and ID verification search (soft footprint)."},
+  {id:73,term:"Search request",definition:"A generic term referring to an inbound API call from a client requesting a credit report on a consumer. A single search may request a bundle of products/services (credit score, characteristics, ID check, AML check, income validation etc.). The information passed to the API is the 'input message', which must at minimum contain the PII of the individual(s) for entity matching."},
+  {id:74,term:"Source URN",definition:"A proposed design feature — a unique reference number on a data item allowing it to be traced back to its original source in the data lake. Also used as a secondary key to record the 'cause' of entity key changes in the key change history (e.g. recording which search request triggered a key collapse)."},
+  {id:75,term:"Supplier",definition:"A company or organisation that contributes data to the bureau. They need not necessarily also be a client."},
+  {id:76,term:"Supplier Portal",definition:"A core bureau component — a GUI that allows an individual supplier to make an urgent manual change to data they have supplied about one of their customers."},
+  {id:77,term:"Suppressions",definition:"See Ghosting. Note that the Verify concept of suppressions has no direct analogue in a PCK/person-centric architecture."},
+  {id:78,term:"Tradeline",definition:"See Account. A tradeline refers to any account record appearing on a consumer credit report, representing a credit agreement between a lender and a borrower."}
+];
+
+let nextId = 79;
+let activeLetter = null;
+let editingId = null;
+
+async function saveToStorage() {
+  try { await window.storage.set('csuk-glossary-v1', JSON.stringify({terms, nextId})); } catch(e) {}
+}
+
+async function loadFromStorage() {
+  try {
+    const r = await window.storage.get('csuk-glossary-v1');
+    if (r && r.value) {
+      const d = JSON.parse(r.value);
+      if (d.terms && d.terms.length > 0) { terms = d.terms; nextId = d.nextId || 79; }
+    }
+  } catch(e) {}
+}
+
+function render() {
+  const q = document.getElementById('searchInput').value.toLowerCase().trim();
+  const filtered = terms.filter(t =>
+    (!q || t.term.toLowerCase().includes(q) || t.definition.toLowerCase().includes(q)) &&
+    (!activeLetter || t.term.toUpperCase().startsWith(activeLetter))
+  );
+  const sorted = [...filtered].sort((a,b) => a.term.localeCompare(b.term));
+  document.getElementById('termCount').textContent = terms.length + ' terms';
+  document.getElementById('resultInfo').textContent = (q || activeLetter) ? `${filtered.length} of ${terms.length} terms` : '';
+  const byLetter = {};
+  sorted.forEach(t => { const l = t.term[0].toUpperCase(); if (!byLetter[l]) byLetter[l]=[]; byLetter[l].push(t); });
+  const main = document.getElementById('main');
+  const noR = document.getElementById('noResults');
+  if (sorted.length === 0) { main.innerHTML=''; noR.classList.add('show'); renderAZ(); return; }
+  noR.classList.remove('show');
+  main.innerHTML = Object.entries(byLetter).sort(([a],[b])=>a.localeCompare(b)).map(([letter,ts])=>`
+    <div class="letter-section" id="sec-${letter}">
+      <div class="letter-heading"><div class="letter-badge">${letter}</div><div class="letter-line"></div></div>
+      ${ts.map(t=>renderCard(t,q)).join('')}
+    </div>`).join('');
+  renderAZ();
+}
+
+function esc(str) { return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
+
+function highlight(str, q) {
+  if (!q) return esc(str);
+  return esc(str).replace(new RegExp(`(${q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')})`, 'gi'), '<mark>$1</mark>');
+}
+
+function renderCard(t, q) {
+  return `<div class="term-card" id="card-${t.id}">
+    <div class="term-header" onclick="toggleCard(${t.id})">
+      <div class="term-name">${highlight(t.term,q)}</div>
+      <div class="term-actions" onclick="event.stopPropagation()">
+        <button class="act-btn act-edit" title="Edit" onclick="openModal(${t.id})">✏️</button>
+        <button class="act-btn act-del" title="Delete" onclick="deleteTerm(${t.id})">🗑</button>
+      </div>
+      <div class="term-toggle">▼</div>
+    </div>
+    <div class="term-body">
+      <p>${highlight(t.definition,q)}</p>
+      <button class="back-top" onclick="scrollToTop()">↑ Back to top</button>
+    </div>
+  </div>`;
+}
+
+function renderAZ() {
+  const letters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('');
+  const has = new Set(terms.map(t=>t.term[0].toUpperCase()));
+  document.getElementById('azNav').innerHTML =
+    letters.map(l=>`<button class="az-btn ${has.has(l)?'has':'none'} ${activeLetter===l?'active':''}" onclick="filterLetter('${l}')">${l}</button>`).join('') +
+    `<button class="az-all" onclick="clearFilter()">All</button>`;
+}
+
+function toggleCard(id) { document.getElementById('card-'+id).classList.toggle('open'); }
+function filterLetter(l) {
+  activeLetter = activeLetter===l ? null : l; render();
+  if (activeLetter) { const s=document.getElementById('sec-'+activeLetter); if(s) s.scrollIntoView({behavior:'smooth',block:'start'}); }
+}
+function clearFilter() { activeLetter=null; render(); }
+function scrollToTop() { window.scrollTo({top:0,behavior:'smooth'}); }
+
+function openModal(id=null) {
+  editingId=id;
+  const t = id ? terms.find(x=>x.id===id) : null;
+  document.getElementById('modalTitle').textContent = id ? 'Edit Term' : 'Add New Term';
+  document.getElementById('termInput').value = t ? t.term : '';
+  document.getElementById('defInput').value = t ? t.definition : '';
+  document.getElementById('modalOverlay').classList.add('open');
+  setTimeout(()=>document.getElementById('termInput').focus(),100);
+}
+
+function closeModal() { document.getElementById('modalOverlay').classList.remove('open'); editingId=null; }
+
+function saveTerm() {
+  const term = document.getElementById('termInput').value.trim();
+  const def = document.getElementById('defInput').value.trim();
+  if (!term || !def) { showToast('Please enter both a term and a definition.','error'); return; }
+  if (editingId) {
+    const t = terms.find(x=>x.id===editingId);
+    if (t) { t.term=term; t.definition=def; }
+    showToast('Term updated successfully.','success');
+  } else {
+    terms.push({id:nextId++,term,definition:def});
+    showToast('New term added successfully.','success');
+  }
+  saveToStorage(); closeModal(); render();
+}
+
+function deleteTerm(id) {
+  if (!confirm('Delete this term?')) return;
+  terms = terms.filter(t=>t.id!==id);
+  saveToStorage(); render();
+  showToast('Term deleted.','success');
+}
+
+async function aiEnhance() {
+  const term = document.getElementById('termInput').value.trim();
+  const existing = document.getElementById('defInput').value.trim();
+  if (!term) { showToast('Please enter a term name first.','error'); return; }
+  const btn = document.getElementById('aiEnhanceBtn');
+  btn.disabled=true;
+  btn.innerHTML='<span class="ai-loading"></span> Enhancing…';
+  const prompt = existing
+    ? `You are a credit industry expert writing for a UK consumer credit bureau internal glossary. Improve and enhance this definition for the term "${term}". Make it clear, precise and professional. Keep it concise (2-4 sentences). Return only the definition text, no labels, headings or preamble.\n\nExisting definition: ${existing}`
+    : `You are a credit industry expert writing for a UK consumer credit bureau internal glossary. Write a clear, precise and professional definition for the term "${term}" in the context of UK consumer credit bureaus and credit reference agencies. Keep it concise (2-4 sentences). Return only the definition text, no labels, headings or preamble.`;
+  try {
+    const r = await fetch("https://api.anthropic.com/v1/messages",{method:"POST",headers:{"Content-Type":"application/json"},body:JSON.stringify({model:"claude-sonnet-4-20250514",max_tokens:1000,messages:[{role:"user",content:prompt}]})});
+    const d = await r.json();
+    const text = d.content?.find(b=>b.type==='text')?.text||'';
+    if (text) { document.getElementById('defInput').value=text.trim(); showToast('Definition enhanced by AI ✨','success'); }
+    else showToast('AI enhancement failed. Please try again.','error');
+  } catch(e) { showToast('AI enhancement failed. Please try again.','error'); }
+  btn.disabled=false;
+  btn.innerHTML='<span>✨</span> AI Enhance Definition';
+}
+
+function showToast(msg, type='success') {
+  const t=document.getElementById('toast');
+  t.textContent=(type==='success'?'✓  ':'✕  ')+msg;
+  t.className=`toast show`;
+  t.style.borderLeft=`3px solid ${type==='success'?'#4ade80':'#e82222'}`;
+  setTimeout(()=>t.classList.remove('show'),3000);
+}
+
+document.getElementById('modalOverlay').addEventListener('click',e=>{ if(e.target===document.getElementById('modalOverlay')) closeModal(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+
+(async()=>{ await loadFromStorage(); render(); })();
+</script>
+</body>
+</html>
