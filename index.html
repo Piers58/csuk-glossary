@@ -92,6 +92,33 @@
   .toast{position:fixed;bottom:24px;right:24px;background:var(--navy);color:var(--white);padding:10px 18px;border-radius:8px;font-size:13px;font-weight:500;z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s;}
   .toast.show{transform:translateY(0);opacity:1;}
   .footer{padding:20px 48px;font-size:11px;color:var(--grey-400);border-top:1px solid var(--grey-200);}
+  /* Bulk upload modal */
+  .bulk-modal{width:720px;}
+  .upload-zone{border:2px dashed var(--grey-200);border-radius:10px;padding:32px;text-align:center;cursor:pointer;transition:all 0.2s;background:var(--grey-100);margin-bottom:16px;}
+  .upload-zone:hover,.upload-zone.drag{border-color:var(--red);background:rgba(232,34,34,0.04);}
+  .upload-zone-icon{font-size:28px;margin-bottom:8px;}
+  .upload-zone-text{font-size:13px;font-weight:600;color:var(--navy);margin-bottom:4px;}
+  .upload-zone-sub{font-size:11px;color:var(--grey-400);}
+  .upload-template{font-size:11px;color:var(--red);cursor:pointer;text-decoration:underline;margin-top:8px;display:inline-block;}
+  .preview-table-wrap{max-height:320px;overflow-y:auto;border:1px solid var(--grey-200);border-radius:8px;margin-bottom:12px;}
+  .preview-table{width:100%;border-collapse:collapse;font-size:12px;}
+  .preview-table th{background:var(--navy);color:var(--white);padding:8px 12px;text-align:left;font-weight:600;letter-spacing:0.5px;position:sticky;top:0;}
+  .preview-table td{padding:8px 12px;border-bottom:1px solid var(--grey-200);vertical-align:top;}
+  .preview-table tr:last-child td{border-bottom:none;}
+  .preview-table tr.dup td{background:#fff8e1;}
+  .preview-table tr.skip td{opacity:0.4;text-decoration:line-through;}
+  .dup-badge{font-size:10px;background:#f59e0b;color:#fff;padding:1px 6px;border-radius:3px;font-weight:700;margin-left:6px;}
+  .preview-summary{font-size:12px;color:var(--grey-600);margin-bottom:12px;display:flex;gap:16px;}
+  .preview-summary span{display:flex;align-items:center;gap:4px;}
+  .preview-summary .ok{color:#16a34a;}
+  .preview-summary .warn{color:#f59e0b;}
+  .preview-summary .skip{color:var(--grey-400);}
+  .row-check{width:16px;height:16px;cursor:pointer;accent-color:var(--red);}
+  .bulk-hint{font-size:11px;color:var(--grey-400);margin-bottom:12px;padding:10px 12px;background:var(--grey-100);border-radius:6px;line-height:1.6;}
+  .col-check{width:32px;}
+  .col-term{width:30%;}
+  .col-def{width:55%;}
+  .col-status{width:15%;}
 </style>
 </head>
 <body>
@@ -112,6 +139,7 @@
     <input type="text" id="searchInput" placeholder="Search terms and definitions…" oninput="render()">
   </div>
   <button class="btn btn-primary" onclick="openModal()">+ Add Term</button>
+  <button class="btn btn-outline" onclick="openBulkModal()">⬆ Bulk Upload</button>
   <div class="result-info" id="resultInfo"></div>
 </div>
 
@@ -137,6 +165,56 @@
     <div class="modal-actions">
       <button class="btn btn-outline" onclick="closeModal()">Cancel</button>
       <button class="btn btn-primary" onclick="saveTerm()">Save Term</button>
+    </div>
+  </div>
+</div>
+
+<!-- Bulk Upload Modal -->
+<div class="modal-overlay" id="bulkModalOverlay">
+  <div class="modal bulk-modal">
+    <div class="modal-title"><span class="bar"></span><span>Bulk Upload Terms from Excel</span></div>
+
+    <div id="bulkStep1">
+      <div class="bulk-hint">
+        📋 <strong>Required columns:</strong> <code>Term</code> and <code>Definition</code> (column headers must be in row 1).<br>
+        Save your Excel file as <strong>.xlsx</strong> or <strong>.csv</strong> before uploading.
+        <br><span class="upload-template" onclick="downloadTemplate()">⬇ Download Excel template</span>
+      </div>
+      <div class="upload-zone" id="uploadZone" onclick="document.getElementById('bulkFileInput').click()"
+           ondragover="event.preventDefault();this.classList.add('drag')"
+           ondragleave="this.classList.remove('drag')"
+           ondrop="handleDrop(event)">
+        <div class="upload-zone-icon">📂</div>
+        <div class="upload-zone-text">Click to choose a file, or drag and drop here</div>
+        <div class="upload-zone-sub">Supports .xlsx and .csv files</div>
+      </div>
+      <input type="file" id="bulkFileInput" accept=".xlsx,.csv" style="display:none" onchange="handleFileSelect(event)">
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeBulkModal()">Cancel</button>
+      </div>
+    </div>
+
+    <div id="bulkStep2" style="display:none">
+      <div class="preview-summary" id="previewSummary"></div>
+      <div class="preview-table-wrap">
+        <table class="preview-table">
+          <thead>
+            <tr>
+              <th class="col-check"><input type="checkbox" class="row-check" id="checkAll" onchange="toggleAll(this)" checked></th>
+              <th class="col-term">Term</th>
+              <th class="col-def">Definition</th>
+              <th class="col-status">Status</th>
+            </tr>
+          </thead>
+          <tbody id="previewBody"></tbody>
+        </table>
+      </div>
+      <div style="font-size:11px;color:var(--grey-400);margin-bottom:12px;">⚠ Highlighted rows already exist in the glossary. Uncheck any rows you don't want to import.</div>
+      <div class="modal-actions">
+        <button class="btn btn-outline" onclick="closeBulkModal()">Cancel</button>
+        <button class="btn btn-outline" onclick="resetBulkModal()">← Back</button>
+        <button class="btn btn-primary" id="importBtn" onclick="importSelected()">Import Selected</button>
+      </div>
     </div>
   </div>
 </div>
@@ -371,7 +449,197 @@ function showToast(msg, type='success') {
 }
 
 document.getElementById('modalOverlay').addEventListener('click',e=>{ if(e.target===document.getElementById('modalOverlay')) closeModal(); });
-document.addEventListener('keydown',e=>{ if(e.key==='Escape') closeModal(); });
+document.getElementById('bulkModalOverlay').addEventListener('click',e=>{ if(e.target===document.getElementById('bulkModalOverlay')) closeBulkModal(); });
+document.addEventListener('keydown',e=>{ if(e.key==='Escape'){ closeModal(); closeBulkModal(); } });
+
+// ── Bulk Upload ──────────────────────────────────────────────────────────────
+
+let bulkRows = []; // parsed rows from file
+
+function openBulkModal() {
+  resetBulkModal();
+  document.getElementById('bulkModalOverlay').classList.add('open');
+}
+
+function closeBulkModal() {
+  document.getElementById('bulkModalOverlay').classList.remove('open');
+  bulkRows = [];
+}
+
+function resetBulkModal() {
+  bulkRows = [];
+  document.getElementById('bulkStep1').style.display = '';
+  document.getElementById('bulkStep2').style.display = 'none';
+  document.getElementById('bulkFileInput').value = '';
+  document.getElementById('uploadZone').classList.remove('drag');
+}
+
+function handleDrop(e) {
+  e.preventDefault();
+  document.getElementById('uploadZone').classList.remove('drag');
+  const file = e.dataTransfer.files[0];
+  if (file) processFile(file);
+}
+
+function handleFileSelect(e) {
+  const file = e.target.files[0];
+  if (file) processFile(file);
+}
+
+function processFile(file) {
+  const name = file.name.toLowerCase();
+  if (name.endsWith('.csv')) {
+    const reader = new FileReader();
+    reader.onload = ev => parseCSV(ev.target.result);
+    reader.readAsText(file);
+  } else if (name.endsWith('.xlsx')) {
+    const reader = new FileReader();
+    reader.onload = ev => parseXLSX(ev.target.result);
+    reader.readAsArrayBuffer(file);
+  } else {
+    showToast('Please upload a .xlsx or .csv file.', 'error');
+  }
+}
+
+function parseCSV(text) {
+  const lines = text.split(/\r?\n/).filter(l => l.trim());
+  if (lines.length < 2) { showToast('File appears to be empty.', 'error'); return; }
+  const headers = splitCSVRow(lines[0]).map(h => h.trim().toLowerCase());
+  const termIdx = headers.findIndex(h => h === 'term');
+  const defIdx  = headers.findIndex(h => h === 'definition');
+  if (termIdx === -1 || defIdx === -1) {
+    showToast('Columns "Term" and "Definition" not found in row 1.', 'error'); return;
+  }
+  const rows = [];
+  for (let i = 1; i < lines.length; i++) {
+    const cols = splitCSVRow(lines[i]);
+    const term = (cols[termIdx] || '').trim();
+    const def  = (cols[defIdx]  || '').trim();
+    if (term) rows.push({ term, definition: def });
+  }
+  if (!rows.length) { showToast('No data rows found.', 'error'); return; }
+  showPreview(rows);
+}
+
+function splitCSVRow(row) {
+  const result = []; let cur = ''; let inQ = false;
+  for (let i = 0; i < row.length; i++) {
+    const c = row[i];
+    if (c === '"') { inQ = !inQ; }
+    else if (c === ',' && !inQ) { result.push(cur); cur = ''; }
+    else cur += c;
+  }
+  result.push(cur);
+  return result.map(s => s.replace(/^"|"$/g,''));
+}
+
+function parseXLSX(buffer) {
+  // Load SheetJS from CDN dynamically if not already loaded
+  if (typeof XLSX !== 'undefined') {
+    doParseXLSX(buffer); return;
+  }
+  const s = document.createElement('script');
+  s.src = 'https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js';
+  s.onload = () => doParseXLSX(buffer);
+  s.onerror = () => showToast('Could not load Excel parser. Try saving as CSV instead.', 'error');
+  document.head.appendChild(s);
+}
+
+function doParseXLSX(buffer) {
+  try {
+    const wb = XLSX.read(buffer, { type: 'array' });
+    const ws = wb.Sheets[wb.SheetNames[0]];
+    const data = XLSX.utils.sheet_to_json(ws, { defval: '' });
+    if (!data.length) { showToast('No data found in spreadsheet.', 'error'); return; }
+    // Find columns case-insensitively
+    const sample = data[0];
+    const keys = Object.keys(sample);
+    const termKey = keys.find(k => k.trim().toLowerCase() === 'term');
+    const defKey  = keys.find(k => k.trim().toLowerCase() === 'definition');
+    if (!termKey || !defKey) {
+      showToast('Columns "Term" and "Definition" not found in row 1.', 'error'); return;
+    }
+    const rows = data
+      .map(r => ({ term: String(r[termKey]||'').trim(), definition: String(r[defKey]||'').trim() }))
+      .filter(r => r.term);
+    if (!rows.length) { showToast('No data rows found.', 'error'); return; }
+    showPreview(rows);
+  } catch(e) { showToast('Could not read Excel file. Try saving as CSV instead.', 'error'); }
+}
+
+function showPreview(rows) {
+  const existingTerms = new Set(terms.map(t => t.term.toLowerCase()));
+  bulkRows = rows.map(r => ({
+    ...r,
+    isDuplicate: existingTerms.has(r.term.toLowerCase()),
+    selected: true
+  }));
+
+  const newCount  = bulkRows.filter(r => !r.isDuplicate).length;
+  const dupCount  = bulkRows.filter(r =>  r.isDuplicate).length;
+
+  document.getElementById('previewSummary').innerHTML =
+    `<span class="ok">✓ ${newCount} new term${newCount!==1?'s':''}</span>` +
+    (dupCount ? `<span class="warn">⚠ ${dupCount} duplicate${dupCount!==1?'s':''} (already in glossary)</span>` : '') +
+    `<span>${bulkRows.length} total rows</span>`;
+
+  document.getElementById('previewBody').innerHTML = bulkRows.map((r, i) => `
+    <tr class="${r.isDuplicate ? 'dup' : ''}" id="previewRow${i}">
+      <td><input type="checkbox" class="row-check" ${r.selected?'checked':''} onchange="toggleRow(${i},this)"></td>
+      <td>${esc(r.term)}${r.isDuplicate ? '<span class="dup-badge">DUP</span>' : ''}</td>
+      <td>${esc(r.definition||'—')}</td>
+      <td style="font-size:11px;color:${r.isDuplicate?'#f59e0b':'#16a34a'}">${r.isDuplicate?'Duplicate':'New'}</td>
+    </tr>`).join('');
+
+  document.getElementById('bulkStep1').style.display = 'none';
+  document.getElementById('bulkStep2').style.display = '';
+}
+
+function toggleRow(i, cb) {
+  bulkRows[i].selected = cb.checked;
+  const row = document.getElementById('previewRow' + i);
+  row.classList.toggle('skip', !cb.checked);
+}
+
+function toggleAll(cb) {
+  bulkRows.forEach((r, i) => {
+    r.selected = cb.checked;
+    document.querySelectorAll('.row-check')[i+1].checked = cb.checked;
+    document.getElementById('previewRow'+i).classList.toggle('skip', !cb.checked);
+  });
+}
+
+function importSelected() {
+  const toImport = bulkRows.filter(r => r.selected);
+  if (!toImport.length) { showToast('No rows selected to import.', 'error'); return; }
+
+  let added = 0, skipped = 0;
+  const existingTerms = new Set(terms.map(t => t.term.toLowerCase()));
+
+  toImport.forEach(r => {
+    if (existingTerms.has(r.term.toLowerCase())) {
+      skipped++; // still selected but duplicate — skip to avoid double entries
+    } else {
+      terms.push({ id: nextId++, term: r.term, definition: r.definition || '' });
+      existingTerms.add(r.term.toLowerCase());
+      added++;
+    }
+  });
+
+  saveToStorage(); render(); closeBulkModal();
+  showToast(`✓ ${added} term${added!==1?'s':''} imported${skipped?' · '+skipped+' duplicate'+(skipped!==1?'s':'')+' skipped':''}.`, 'success');
+}
+
+function downloadTemplate() {
+  const csv = 'Term,Definition\nExample Term,Enter your definition here\nAnother Term,Another definition';
+  const blob = new Blob([csv], { type: 'text/csv' });
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'csuk-glossary-template.csv';
+  a.click();
+}
+
+// ── End Bulk Upload ──────────────────────────────────────────────────────────
 
 (async()=>{ await loadFromStorage(); render(); })();
 </script>
